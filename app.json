@@ -1,0 +1,31 @@
+{
+  "expo": {
+    "name": "chatGPT-app",
+    "slug": "chatGPT-app",
+    "scheme": "chatgpt-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/edelweiss.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/edelweiss.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
+  }
+}
