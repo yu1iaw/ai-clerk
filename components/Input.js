@@ -33,13 +33,16 @@ export const Input = ({setIsContentChange}) => {
         setIsContentChange(true);
         setInputValue('');
 
-        await setDoc(doc(firestoreDB, "users", `${user?.firstName}-${user?.id}`, "messages", `${Date.now()}`), {role: 'user', content: inputValue});
+        await setDoc(doc(firestoreDB, "users", `${user?.firstName}-${user?.id}`, "messages", `${Date.now()}`), {role: 'user', content: inputValue, createdAt: new Date().toUTCString().slice(0, -13)});
 
         try {
             const data = collection(firestoreDB, 'users', `${user?.firstName}-${user?.id}`, 'messages');
         
             const querySnapshot = await getDocs(data);
-            const conversationArr = querySnapshot.docs.map(doc => doc.data());
+            const conversationArr = querySnapshot.docs.map(doc => doc.data()).map(item => {
+                if ("createdAt" in item) delete item.createdAt;
+                return item;
+            });
      
             timeoutId = setTimeout(async () => {
                 try {
@@ -57,7 +60,7 @@ export const Input = ({setIsContentChange}) => {
                     })
              
                     setIsLoading(false);
-                    await setDoc(doc(firestoreDB, "users", `${user?.firstName}-${user?.id}`, "messages", `${Date.now()}`), response.data.choices[0].message);
+                    await setDoc(doc(firestoreDB, "users", `${user?.firstName}-${user?.id}`, "messages", `${Date.now()}`), {...response.data.choices[0].message, createdAt: new Date().toUTCString().slice(0, -13)});
                     await playSound();
                 } catch(e) {
                     setIsLoading(false);

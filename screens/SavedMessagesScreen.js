@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { FlatList, StyleSheet } from "react-native";
 import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
-import { FlashList } from "@shopify/flash-list";
+import { useDrawerStatus } from '@react-navigation/drawer';
 import { collection, getFirestore, onSnapshot } from "firebase/firestore";
 import { useAuth, useUser } from "@clerk/clerk-expo";
 
@@ -21,31 +21,39 @@ export const SavedMessagesScreen = ({navigation}) => {
     const app = initFireBase();
     const firestoreDB = getFirestore(app);
     const { user } = useUser();
-    const { isLoaded, signOut } = useAuth();
+    const isDrawerOpen = useDrawerStatus() === 'open';
     
    
     const onDelete = () => {
         setWasDeleted(true);
     }
     
+    
     useLayoutEffect(() => {
+        let timerId;
+
         navigation.setOptions({
             headerRight: ({tintColor}) => (
                 <IconButton 
                     IconPack={MaterialCommunityIcons}
-                    name={ !wasDeleted ? "emoticon-excited-outline" : "emoticon-frown-outline" }
+                    name={ wasDeleted ||  isDrawerOpen ? "emoticon-frown-outline" : "emoticon-excited-outline" }
                     size={29} 
                     color={tintColor} 
                     right
                     onPress={() => {
-                        setWasDeleted(state => !state);
-                        signOut();
+                        navigation.openDrawer();
                     }} />
             )
         })
-    }, [wasDeleted, savedMessages])
-    
+        if (!isDrawerOpen && wasDeleted) {
+            timerId = setTimeout(() => setWasDeleted(false), 2000)
+        }
 
+        return () => {
+            clearTimeout(timerId)
+        }
+    }, [wasDeleted, savedMessages, isDrawerOpen])
+    
 
     useEffect(() => {
         const data = collection(firestoreDB, 'users', `${user?.firstName}-${user?.id}`, 'saved');
@@ -72,9 +80,8 @@ export const SavedMessagesScreen = ({navigation}) => {
 
     return (
         <ImageBackgroundContainer>
-            <FlashList 
+            <FlatList 
                 ref={ref => flatListRef.current = ref}
-                estimatedItemSize={200}
                 showsVerticalScrollIndicator={false}
                 onContentSizeChange={handleContentChange}
                 data={savedMessages} 

@@ -3,7 +3,6 @@ import { FlatList, Alert, Keyboard, StyleSheet, View } from "react-native";
 import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
 import { addDoc, collection, deleteDoc, doc, getDocs, getFirestore, onSnapshot } from 'firebase/firestore';
 import * as Progress from 'react-native-progress';
-import { FlashList } from "@shopify/flash-list";
 import { useUser } from "@clerk/clerk-expo";
 
 import { ImageBackgroundContainer } from "../components/ImageBackgroundContainer";
@@ -57,7 +56,7 @@ export const ChatScreen = ({navigation, route}) => {
     useEffect(() => {
         onSnapshot(data, snapshot => {
             const content = snapshot.docs.map(doc => {
-                return {  ...doc.data(), key: doc.id, createdAt: new Date().toUTCString().slice(0, -13) }
+                return {  ...doc.data(), key: doc.id }
             })
             setMessages(content)
         })
@@ -107,9 +106,8 @@ export const ChatScreen = ({navigation, route}) => {
                 </View>
             ) : (
                 <>
-                    <FlashList 
+                    <FlatList 
                         ref={ref => flatList.current = ref}
-                        estimatedItemSize={200}
                         onContentSizeChange={handleContentChange}
                         onLayout={onLayout}
                         data={messages}

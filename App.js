@@ -1,7 +1,9 @@
 import 'react-native-gesture-handler';
+import { useCallback, useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import { StyleSheet, View } from 'react-native';
 import * as SplashScreen from "expo-splash-screen";
 import * as Font from "expo-font";
@@ -13,12 +15,12 @@ import * as SecureStore from "expo-secure-store";
 
 import { ChatScreen } from './screens/ChatScreen';
 import { SavedMessagesScreen } from './screens/SavedMessagesScreen';
-import { useCallback, useEffect, useState } from 'react';
-import { IconButton } from './components/IconButton';
-import colors from './constants/colors';
 import { SignInScreen } from './screens/SignInScreen';
-import { EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY } from "@env";
 import { ImageBackgroundContainer } from './components/ImageBackgroundContainer';
+import { IconButton } from './components/IconButton';
+import { DrawerLabel } from './components/DrawerLabel';
+import colors from './constants/colors';
+import { EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY } from "@env";
 
 
 const tokenCache = {
@@ -41,6 +43,43 @@ const tokenCache = {
 SplashScreen.preventAutoHideAsync();
 
 const Stack = createStackNavigator();
+const Drawer = createDrawerNavigator();
+
+
+const DrawerNavigator = () => (
+  <Drawer.Navigator 
+    screenOptions={{
+      headerStyle: {backgroundColor: colors.thistle},
+      headerTintColor: "white",
+      headerTitleAlign: "center", 
+      headerTitleStyle: {
+        fontFamily: "cherry",
+        fontSize: 35
+      },
+    }}
+  >
+    <Drawer.Screen 
+      name="SavedScreen" 
+      component={SavedMessagesScreen} 
+      options={({navigation}) => ({
+        headerTitle: "Saved",
+        drawerLabel: () => <DrawerLabel />,
+        drawerContentContainerStyle: {justifyContent: "center", flex: 1, backgroundColor: colors.thistle},
+        drawerActiveBackgroundColor: colors.cheeseColor,
+        drawerItemStyle: {borderWidth: 2, borderColor: "white"},
+        headerLeft: ({tintColor}) => (
+          <IconButton
+            IconPack={AntDesign} 
+            name="caretleft" 
+            size={27} 
+            color={tintColor} 
+            left
+            onPress={() => navigation.replace("ChatScreen")} />
+        )
+      })} 
+    />
+  </Drawer.Navigator>
+)
 
 
 const RegisterStack = () => (
@@ -92,25 +131,14 @@ const PublicStack = () => (
                   size={26} 
                   color={tintColor} 
                   right
-                  onPress={() => navigation.replace("SavedScreen")} />
+                  onPress={() => navigation.replace("DrawerScreen")} />
               )
             })}
           />
       <Stack.Screen 
-        name="SavedScreen" 
-        component={SavedMessagesScreen} 
-        options={({navigation}) => ({
-          headerTitle: "Saved",
-          headerLeft: ({tintColor}) => (
-            <IconButton
-              IconPack={AntDesign} 
-              name="caretleft" 
-              size={27} 
-              color={tintColor} 
-              left
-              onPress={() => navigation.replace("ChatScreen")} />
-            )
-          })} 
+        name="DrawerScreen" 
+        component={DrawerNavigator} 
+        options={{headerShown: false}}
       />
     </Stack.Navigator>
   </SignedIn>
