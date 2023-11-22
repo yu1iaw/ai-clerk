@@ -18,7 +18,7 @@ import { SavedMessagesScreen } from './screens/SavedMessagesScreen';
 import { SignInScreen } from './screens/SignInScreen';
 import { ImageBackgroundContainer } from './components/ImageBackgroundContainer';
 import { IconButton } from './components/IconButton';
-import { DrawerLabel } from './components/DrawerLabel';
+import { CustomDrawerContent } from './components/CustomDrawerContent';
 import colors from './constants/colors';
 import { EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY } from "@env";
 
@@ -57,16 +57,13 @@ const DrawerNavigator = () => (
         fontSize: 35
       },
     }}
+    drawerContent={() => <CustomDrawerContent />}
   >
     <Drawer.Screen 
       name="SavedScreen" 
       component={SavedMessagesScreen} 
       options={({navigation}) => ({
         headerTitle: "Saved",
-        drawerLabel: () => <DrawerLabel />,
-        drawerContentContainerStyle: {justifyContent: "center", flex: 1, backgroundColor: colors.thistle},
-        drawerActiveBackgroundColor: colors.cheeseColor,
-        drawerItemStyle: {borderWidth: 2, borderColor: "white"},
         headerLeft: ({tintColor}) => (
           <IconButton
             IconPack={AntDesign} 
@@ -202,17 +199,7 @@ export default function App() {
         <MenuProvider>
           <NavigationContainer>
             <View style={styles.container} onLayout={onLayout}>
-              <Stack.Navigator 
-                screenOptions={{
-                  headerStyle: {backgroundColor: colors.thistle},
-                  headerTintColor: "white",
-                  headerTitleAlign: "center", 
-                  headerTitleStyle: {
-                    fontFamily: "cherry",
-                    fontSize: 35
-                  },
-                  presentation: "modal"}} 
-              >
+              <Stack.Navigator>
                 <Stack.Screen name="RootScreen" component={RootStack} options={{headerShown: false}}/>
               </Stack.Navigator>
             </View>

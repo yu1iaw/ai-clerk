@@ -22,7 +22,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.yu1ia.chatGPTapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"

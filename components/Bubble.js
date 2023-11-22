@@ -44,10 +44,10 @@ export const Bubble = ({message, onDelete, setIsContentChange}) => {
         case 'assistant':
             outerContainer.justifyContent = "flex-end";
             innerContainer = {...innerContainer, backgroundColor: colors.salmon, flexDirection: "row", alignItems: "center"};
-            textStyle = {...textStyle, color: colors.darkGreen, maxWidth: laptopWidth > 425 ? 550 : 267, marginRight: laptopWidth > 425 ? 20 : 6, fontSize: laptopWidth > 425 ? 20 : textStyle.fontSize}
+            textStyle = {...textStyle, maxWidth: laptopWidth > 425 ? 550 : 267, marginRight: laptopWidth > 425 ? 20 : 6, fontSize: laptopWidth > 425 ? 20 : textStyle.fontSize}
             break;
         case 'saved':
-            innerContainer = {...innerContainer, backgroundColor: colors.salmon, borderColor: "transparent", paddingVertical: 15, paddingLeft: 15, width: "100%", flexDirection: "row", alignItems: "center", justifyContent: "space-between"};
+            innerContainer = {...innerContainer, backgroundColor: colors.salmon, paddingVertical: 15, paddingLeft: 15, width: "100%", flexDirection: "row", alignItems: "center", justifyContent: "space-between"};
             textStyle.maxWidth = laptopWidth > 425 ? 700 : Dimensions.get("screen").scale > 3 ? 270 : 290;
             dateTextStyle.minWidth = laptopWidth > 425 ? 690 : Dimensions.get("screen").scale > 3 ? 260 : 280;
             laptopWidth > 425 ? textStyle.fontSize = 20 : null;
@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
     text: {
         fontFamily: "IBM",
         fontSize: Dimensions.get("screen").fontScale > 1 ? 15 : 16,
-        color: '#004466'
+        color: colors.darkGreen
     },
     dateText: {
         textAlign: "right", 
